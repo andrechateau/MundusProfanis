@@ -11,6 +11,7 @@ import com.artemis.utils.ImmutableBag;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
+import sun.misc.GC;
 
 /**
  *
@@ -47,16 +48,22 @@ public class GameMap extends TiledMap {
     }
 
     public boolean isBlocked(int X, int Y) {
+
         int walltilex = X - 1;
         int walltiley = Y;
+
         if (walltilex >= 0 && walltilex <= getWidth() && walltiley >= 0 && walltiley <= getHeight()) {
             if (getTileId(walltilex, walltiley, Game.map.getLayerIndex("64Wall")) != 0) {
                 return getTileProperty(getTileId(walltilex, walltiley, Game.map.getLayerIndex("64Wall")), "blocked", "false").equals("true");
             } else {
+                if (getTileId(walltilex + 1, walltiley, Game.map.getLayerIndex("foreground")) != 0) {
+                    return getTileProperty(getTileId(walltilex + 1, walltiley, Game.map.getLayerIndex("foreground")), "blocked", "false").equals("true");
+                }
                 return false;
             }
 
         }
         return true;
     }
+
 }

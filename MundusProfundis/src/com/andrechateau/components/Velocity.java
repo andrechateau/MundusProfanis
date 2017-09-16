@@ -6,8 +6,8 @@ public class Velocity extends Component {
 
     private float x;
     private float y;
-    private float desiredX;
-    private float desiredY;
+    private float desiredX=-1;
+    private float desiredY=-1;
 
     public Velocity() {
     }

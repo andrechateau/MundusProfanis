@@ -30,33 +30,14 @@ public class MovementSystem extends EntityProcessingSystem {
     protected void process(Entity e) {
         Position position = pm.get(e);
         Velocity velocity = vm.get(e);
+        if (velocity.getDesiredX() < 0) {
+            velocity.setDesiredX(position.getX());
+        }
+        if (velocity.getDesiredY() < 0) {
+            velocity.setDesiredY(position.getY());
+        }
         if (position.getX() % 32 == 0 && position.getY() % 32 == 0) {
-            updateAnimation(e, false);
-            if (Game.gc.getInput().isKeyDown(Input.KEY_W)) {
-                if (!Game.map.isBlocked(Game.toTile(position.getX()), Game.toTile(position.getY()) - 1)) {
-                    position.setDirection('w');
-                    velocity.setDesiredY(position.getY() - 32);
-                    position.addY(-velocity.getY() * world.getDelta());
-                }
-            } else if (Game.gc.getInput().isKeyDown(Input.KEY_A)) {
-                if (!Game.map.isBlocked(Game.toTile(position.getX()) - 1, Game.toTile(position.getY()))) {
-                    position.setDirection('a');
-                    velocity.setDesiredX(position.getX() - 32);
-                    position.addX(-velocity.getX() * world.getDelta());
-                }
-            } else if (Game.gc.getInput().isKeyDown(Input.KEY_S)) {
-                if (!Game.map.isBlocked(Game.toTile(position.getX()), Game.toTile(position.getY()) + 1)) {
-                    position.setDirection('s');
-                    velocity.setDesiredY(position.getY() + 32);
-                    position.addY(velocity.getY() * world.getDelta());
-                }
-            } else if (Game.gc.getInput().isKeyDown(Input.KEY_D)) {
-                if (!Game.map.isBlocked(Game.toTile(position.getX()) + 1, Game.toTile(position.getY()))) {
-                    position.setDirection('d');
-                    velocity.setDesiredX(position.getX() + 32);
-                    position.addX(velocity.getX() * world.getDelta());
-                }
-            }
+            updateAnimation(e, true);
         } else {
             updateAnimation(e, true);
             switch (position.getDirection()) {

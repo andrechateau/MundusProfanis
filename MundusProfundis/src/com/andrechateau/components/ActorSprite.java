@@ -22,22 +22,22 @@ public class ActorSprite extends Component {
     private Animation animationD;
 
     public ActorSprite(Image img) {
-        int size = 32;
+        int size = 64;
         animationW = new Animation();
         animationA = new Animation();
         animationS = new Animation();
         animationD = new Animation();
-        for (int i = 0; i < 3; i++) {
-            animationS.addFrame(img.getSubImage(i * size + i + 1, 1, size, size), 100);
+        for (int i = 0; i < 9; i++) {
+            animationS.addFrame(img.getSubImage(i * size, 1, size, size), 50);
         }
-        for (int i = 0; i < 3; i++) {
-            animationD.addFrame(img.getSubImage(i * size + i + 1, 34, size, size), 100);
+        for (int i = 0; i < 9; i++) {
+            animationD.addFrame(img.getSubImage(i * size, 65, size, size), 50);
         }
-        for (int i = 0; i < 3; i++) {
-            animationA.addFrame(img.getSubImage(i * size + i + 1, 67, size, size), 100);
+        for (int i = 0; i < 9; i++) {
+            animationA.addFrame(img.getSubImage(i * size, 129, size, size), 50);
         }
-        for (int i = 0; i < 3; i++) {
-            animationW.addFrame(img.getSubImage(i * size + i + 1, 100, size, size), 100);
+        for (int i = 0; i < 9; i++) {
+            animationW.addFrame(img.getSubImage(i * size, 197, size, size), 50);
         }
     }
 
@@ -48,16 +48,15 @@ public class ActorSprite extends Component {
             animationS.update((int) (delta * 1000.0f));
             animationD.update((int) (delta * 1000.0f));
         }
-
     }
 
     public void stop() {
         if (isAnimating()) {
             setAnimating(false);
-//            animationW.setCurrentFrame(0);
-//            animationA.setCurrentFrame(0);
-//            animationS.setCurrentFrame(0);
-//            animationD.setCurrentFrame(0);
+            animationW.setCurrentFrame(0);
+            animationA.setCurrentFrame(0);
+            animationS.setCurrentFrame(0);
+            animationD.setCurrentFrame(0);
         }
     }
 

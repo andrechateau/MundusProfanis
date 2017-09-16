@@ -3,15 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/dende/Documents/NetBeansProjects/MundusProfundis/src/com/andrechateau/components/ActorSprite.java</file>
-            <file>file:/C:/Users/dende/Documents/NetBeansProjects/MundusProfundis/src/com/andrechateau/systems/DebugPointRenderer.java</file>
-            <file>file:/C:/Users/dende/Documents/NetBeansProjects/MundusProfundis/src/cqt/games/Artemis/Main.java</file>
-            <file>file:/C:/Users/dende/Documents/NetBeansProjects/MundusProfundis/src/com/andrechateau/engine/GameMap.java</file>
-            <file>file:/C:/Users/dende/Documents/NetBeansProjects/MundusProfundis/src/com/andrechateau/components/Sprite.java</file>
-            <file>file:/C:/Users/dende/Documents/NetBeansProjects/MundusProfundis/src/com/andrechateau/systems/MovementSystem.java</file>
-            <file>file:/C:/Users/dende/Documents/NetBeansProjects/MundusProfundis/src/com/andrechateau/core/Game.java</file>
-            <file>file:/C:/Users/dende/Documents/NetBeansProjects/MundusProfundis/src/com/andrechateau/systems/ActorFramerSystem.java</file>
-            <file>file:/C:/Users/dende/Documents/NetBeansProjects/MundusProfundis/src/com/andrechateau/components/Velocity.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/systems/DebugPointRenderer.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/systems/EnemySystem.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/components/Enemy.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/components/Effect.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/core/Game.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/components/Creature.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/systems/ActionSystem.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/entities/PlayerEntity.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/systems/EffectSystem.java</file>
         </group>
     </open-files>
 </project-private>
