@@ -9,6 +9,7 @@ import com.andrechateau.components.ActorSprite;
 import com.andrechateau.components.Creature;
 import com.andrechateau.components.Effect;
 import com.andrechateau.components.Position;
+import com.andrechateau.components.User;
 import com.andrechateau.components.Velocity;
 import com.andrechateau.core.Game;
 import com.artemis.Aspect;
@@ -43,7 +44,7 @@ public class ActionSystem extends EntityProcessingSystem {
 
     @SuppressWarnings("unchecked")
     public ActionSystem() {
-        super(Aspect.getAspectForAll(Position.class, Velocity.class, ActorSprite.class, Creature.class));
+        super(Aspect.getAspectForAll(Position.class, Velocity.class, ActorSprite.class, Creature.class, User.class));
     }
 
     @Override

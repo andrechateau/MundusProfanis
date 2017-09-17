@@ -8,6 +8,7 @@ package com.andrechateau.entities;
 import com.andrechateau.components.ActorSprite;
 import com.andrechateau.components.Creature;
 import com.andrechateau.components.Position;
+import com.andrechateau.components.User;
 import com.andrechateau.components.Velocity;
 import com.andrechateau.persistence.Player;
 import com.artemis.Entity;
@@ -21,6 +22,7 @@ import org.newdawn.slick.SlickException;
  *
  * @author Andre Chateaubriand
  */
+
 public class PlayerEntity {
 
     private long id;
@@ -28,6 +30,7 @@ public class PlayerEntity {
     private Position position;
     private Velocity velocity;
     private ActorSprite actorSprite;
+    private User user;
     private Entity entity;
     private Player player;
 
@@ -35,6 +38,7 @@ public class PlayerEntity {
         try {
             this.player = player;
             this.id = id;
+            this.user = new User();
             this.creature = new Creature();
             this.creature.setHP(player.getHP());
             this.creature.setName(player.getName());
@@ -50,6 +54,7 @@ public class PlayerEntity {
             this.entity.addComponent(velocity);
             this.entity.addComponent(creature);
             this.entity.addComponent(actorSprite);
+            this.entity.addComponent(user);
             this.entity.addToWorld();
         } catch (SlickException ex) {
             Logger.getLogger(PlayerEntity.class.getName()).log(Level.SEVERE, null, ex);

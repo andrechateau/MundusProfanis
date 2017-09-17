@@ -28,6 +28,7 @@ public class MovementSystem extends EntityProcessingSystem {
     }
 
     protected void process(Entity e) {
+        
         Position position = pm.get(e);
         Velocity velocity = vm.get(e);
         if (velocity.getDesiredX() < 0) {
@@ -37,7 +38,7 @@ public class MovementSystem extends EntityProcessingSystem {
             velocity.setDesiredY(position.getY());
         }
         if (position.getX() % 32 == 0 && position.getY() % 32 == 0) {
-            updateAnimation(e, true);
+            updateAnimation(e, false);
         } else {
             updateAnimation(e, true);
             switch (position.getDirection()) {

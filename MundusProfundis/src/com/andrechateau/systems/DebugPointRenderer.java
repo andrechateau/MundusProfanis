@@ -3,10 +3,13 @@ package com.andrechateau.systems;
 import com.andrechateau.components.ActorSprite;
 import com.andrechateau.components.Creature;
 import com.andrechateau.components.Position;
+import com.andrechateau.components.User;
 import com.andrechateau.components.Velocity;
 import com.andrechateau.core.Fonts;
 import com.andrechateau.core.Game;
 import com.andrechateau.engine.Renderer;
+import com.andrechateau.entities.PlayerEntity;
+import com.andrechateau.persistence.Player;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -17,6 +20,9 @@ import com.artemis.EntitySystem;
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import java.awt.Font;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.Animation;
@@ -36,6 +42,9 @@ public class DebugPointRenderer extends EntitySystem implements Renderer {
     @Mapper
     ComponentMapper<Creature> cr;
 
+    @Mapper
+    ComponentMapper<User> um;
+
     @SuppressWarnings("unchecked")
     public DebugPointRenderer() {
         super(Aspect.getAspectForAll(Position.class, ActorSprite.class));
@@ -46,8 +55,6 @@ public class DebugPointRenderer extends EntitySystem implements Renderer {
         mapRenderer(entities);
         debugRenderer(entities);
         HUDRender();
-
-
 
     }
 
@@ -84,7 +91,6 @@ public class DebugPointRenderer extends EntitySystem implements Renderer {
     }
 
     private void creatureRenderer(Entity e) {
-
         Entity player = Game.player.getEntity();
         Position playerpos = pm.get(player);
         Position position = pm.get(e);
@@ -96,42 +102,44 @@ public class DebugPointRenderer extends EntitySystem implements Renderer {
         y -= 13;
         x -= 16;
         Creature c = cr.getSafe(e);
-        if (c
-                != null) {
-            Fonts.ttfbold.drawString(x, y - 25, c.getName(), Color.white);
-            Game.gc.getGraphics().setColor(Color.black);
-            Game.gc.getGraphics().fillRect(x, y - 10, 32, 4);
-            Color color = Color.green;
-            if (c.getHP() > 60 && c.getHP() <= 90) {
-                color = new Color(0, 200, 0);
+        boolean print = true;
+        if (c.getName().equals(Game.player.getName())) {
+            if ((um.getSafe(e) != null)) {
+                print = true;
+            } else {
+                print = false;
             }
-            if (c.getHP() > 30 && c.getHP() <= 60) {
-                color = new Color(200, 200, 0);
-            }
-            if (c.getHP() > 10 && c.getHP() <= 30) {
-                color = new Color(200, 0, 0);
-            }
-            if (c.getHP() <= 10) {
-                color = new Color(100, 0, 0);
-            }
-            Game.gc.getGraphics().setColor(color);
-            Game.gc.getGraphics().fillRect(x + 1, y - 9, 30 * c.getHP() / 100, 2);
         }
+        if (c != null) {
+            if (print) {
+                Fonts.ttfbold.drawString(x, y - 25, c.getName(), Color.white);
+                Game.gc.getGraphics().setColor(Color.black);
+                Game.gc.getGraphics().fillRect(x, y - 10, 32, 4);
+                Color color = Color.green;
+                if (c.getHP() > 60 && c.getHP() <= 90) {
+                    color = new Color(0, 200, 0);
+                }
+                if (c.getHP() > 30 && c.getHP() <= 60) {
+                    color = new Color(200, 200, 0);
+                }
+                if (c.getHP() > 10 && c.getHP() <= 30) {
+                    color = new Color(200, 0, 0);
+                }
+                if (c.getHP() <= 10) {
+                    color = new Color(100, 0, 0);
+                }
+                Game.gc.getGraphics().setColor(color);
+                Game.gc.getGraphics().fillRect(x + 1, y - 9, 30 * c.getHP() / 100, 2);
+                Game.gc.getGraphics().drawRect(x, y, 32, 32);
+                Game.gc.getGraphics().drawRect(x + 1, y + 1, 30, 30);
+                as.get(e).getImage(position.getDirection()).draw(x - 32, y - 32, 64, 64);
 
-        try {
-            // Game.gc.getGraphics().setFont(org.newdawn.slick.font.effects.);
-            Image image = new Image(50, 100);
-
-        } catch (SlickException ex) {
-            Logger.getLogger(DebugPointRenderer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            Game.gc.getGraphics().drawRect(x, y, 32, 32);
+            Game.gc.getGraphics().drawRect(x + 1, y + 1, 30, 30);
+            as.get(e).getImage(position.getDirection()).draw(x - 32, y - 32, 64, 64);
         }
-
-        Game.gc.getGraphics()
-                .drawRect(x, y, 32, 32);
-        Game.gc.getGraphics()
-                .drawRect(x + 1, y + 1, 30, 30);
-        as.get(e)
-                .getImage(position.getDirection()).draw(x - 32, y - 32, 64, 64);
 
     }
 

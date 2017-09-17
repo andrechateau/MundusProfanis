@@ -24,21 +24,26 @@ import org.newdawn.slick.SlickException;
 
 import com.artemis.Entity;
 import com.artemis.World;
+import com.esotericsoftware.kryonet.examples.position.GameClient;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.Image;
 
 public class Game extends BasicGame {
 
-    private World world;
+    public static World world;
 
     public static Player play;
     public static PlayerEntity player;
-
     public static GameContainer gc;
     public static GameMap map;
     public static GameMap ground;
+    public static GameClient client;
+    private static boolean clientConnected = false;
 
     public Game() throws SlickException {
-        super("Coding Quick Tips");
+        super("Mundus Profundis");
     }
 
     public void init(GameContainer gc) throws SlickException {
@@ -53,9 +58,9 @@ public class Game extends BasicGame {
         world.setSystem(new EnemySystem());
         world.setSystem(new EffectSystem());
         world.setSystem(new CombatSystem());
-
         world.initialize();
         player = new PlayerEntity(play, world);
+
         //new PlayerEntity(new Player(14, "jao", "12", 320, 320, 320, 320, 100, 's', "hunter"), world);
         Entity e = world.createEntity();
         e = world.createEntity();
@@ -64,7 +69,6 @@ public class Game extends BasicGame {
         e.addComponent(new Velocity(70, 70));
         e.addComponent(new Creature("Goblinho", "troll", 100));
         e.addComponent(new Enemy());
-
         e.addToWorld();
     }
 
@@ -76,8 +80,14 @@ public class Game extends BasicGame {
     }
 
     public void update(GameContainer gc, int delta) throws SlickException {
-        world.setDelta((delta / 1000.0f));
-
+        if (!clientConnected) {
+            clientConnected = true;
+            Game.client = new GameClient("192.168.0.4", Game.play.getName());
+        } else {
+            world.setDelta((delta / 1000.0f));
+            Game.client.clientUpdate(player.getPlayer());
+            
+        }
     }
 
     // Draw a grid on the screen for easy positioning 
@@ -92,9 +102,11 @@ public class Game extends BasicGame {
 
     @Override
     public boolean closeRequested() {
-        PlayerDAO.savePlayer(player.getPlayer());
-        System.out.println("closed");
-        return super.closeRequested(); //To change body of generated methods, choose Tools | Templates.
+        // PlayerDAO.savePlayer(player.getPlayer());
+        Game.client.close();
+        System.exit(0);
+//super.closeRequested();
+        return true;//To change body of generated methods, choose Tools | Templates.
     }
 
     public static int toTile(float coordinate) {

@@ -5,15 +5,6 @@
  */
 package com.andrechateau.persistence;
 
-import com.andrechateau.components.ActorSprite;
-import com.andrechateau.components.Position;
-import com.andrechateau.components.Velocity;
-import com.artemis.Entity;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-
 /**
  *
  * @author Andre Chateaubriand
@@ -44,6 +35,10 @@ public class Player {
         this.outfit = outfit;
     }
 
+    public Player() {
+    }
+
+    
     /**
      * @return the id
      */

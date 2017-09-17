@@ -10,6 +10,7 @@ import com.andrechateau.components.Creature;
 import com.andrechateau.components.Effect;
 import com.andrechateau.components.Enemy;
 import com.andrechateau.components.Position;
+import com.andrechateau.components.User;
 import com.andrechateau.components.Velocity;
 import com.andrechateau.core.Game;
 import com.artemis.Aspect;
@@ -36,6 +37,8 @@ public class CombatSystem extends EntitySystem {
     ComponentMapper<Enemy> em;
     @Mapper
     ComponentMapper<Creature> cm;
+    @Mapper
+    ComponentMapper<User> um;
 
     @SuppressWarnings("unchecked")
     public CombatSystem() {
@@ -47,7 +50,9 @@ public class CombatSystem extends EntitySystem {
         HashMap<Point, Entity> creatures = new HashMap<>();
         for (Entity entity : entities) {
             Position p = pm.get(entity);
-            creatures.put(new Point((int) p.getX() / 32, (int) p.getY() / 32), entity);
+            if (!(!(um.get(entity) != null) && cm.getSafe(entity).getName().equals(Game.player.getName()))) {
+                creatures.put(new Point((int) p.getX() / 32, (int) p.getY() / 32), entity);
+            }
         }
         for (Entity entity : entities) {
             Position p = pm.get(entity);
@@ -71,13 +76,15 @@ public class CombatSystem extends EntitySystem {
                 e = creatures.get(new Point(pos.x - 1, pos.y + 1));
             }
             if (e != null) {
-                if (em.getSafe(entity) != null) {
-                    if (em.getSafe(e) == null) {
+                //if (um.getSafe(e) != null) {
+                    if (em.getSafe(entity) != null) {
+                        if (em.getSafe(e) == null) {
+                            attack(entity, e);
+                        }
+                    } else if (em.getSafe(e) != null) {
                         attack(entity, e);
                     }
-                } else if (em.getSafe(e) != null) {
-                    attack(entity, e);
-                }
+                //}
             }
         }
     }

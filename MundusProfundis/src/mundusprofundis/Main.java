@@ -2,6 +2,7 @@ package mundusprofundis;
 
 import com.andrechateau.core.Game;
 import com.andrechateau.persistence.PlayerDAO;
+import com.esotericsoftware.kryonet.examples.position.GameClient;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -30,15 +31,21 @@ public class Main {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        //JOptionPane.showMessageDialog(null, Game.player.getId());
+
         try {
 
             AppGameContainer app = new AppGameContainer(new ScalableGame(new Game(), 800, 600));
             app.setDisplayMode(800, 600, false);
             app.setTitle("Mundos Profundis");
-            
+            app.setIcon("res/icons/32x32.tga");
+            app.setAlwaysRender(true);
+            if (app instanceof AppGameContainer) {
+                app.setIcons(new String[]{"res/icons/32x32.tga", "res/icons/24x24.tga", "res/icons/16x16.tga"});
+            }
             app.setTargetFrameRate(60);
             app.setVSync(true);
+            app.setVerbose(false);
+            //app.
             app.start();
         } catch (SlickException e) {
             e.printStackTrace();

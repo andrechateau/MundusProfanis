@@ -17,6 +17,6 @@ import java.sql.SQLException;
 public class ConnectionFactory {
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost/mundusprofundis", "root", "");
+        return DriverManager.getConnection("jdbc:mysql://192.168.0.4/mundusprofundis", "player", "password");
     }
 }
