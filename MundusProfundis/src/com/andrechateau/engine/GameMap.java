@@ -5,7 +5,7 @@
  */
 package com.andrechateau.engine;
 
-import com.andrechateau.core.Game;
+import com.andrechateau.gamestates.Game;
 import com.artemis.Entity;
 import com.artemis.utils.ImmutableBag;
 import org.newdawn.slick.Color;

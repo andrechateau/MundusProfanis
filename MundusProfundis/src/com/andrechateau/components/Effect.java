@@ -5,7 +5,7 @@
  */
 package com.andrechateau.components;
 
-import com.andrechateau.core.Game;
+import com.andrechateau.gamestates.Game;
 import com.artemis.Component;
 import java.util.HashMap;
 import java.util.logging.Level;

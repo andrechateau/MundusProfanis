@@ -80,6 +80,26 @@ public class ActorSprite extends Component {
         }
     }
 
+    public void setNewActorSprite(Image img) {
+        int size = 64;
+        animationW = new Animation();
+        animationA = new Animation();
+        animationS = new Animation();
+        animationD = new Animation();
+        for (int i = 0; i < 9; i++) {
+            animationS.addFrame(img.getSubImage(i * size, 1, size, size), 50);
+        }
+        for (int i = 0; i < 9; i++) {
+            animationD.addFrame(img.getSubImage(i * size, 65, size, size), 50);
+        }
+        for (int i = 0; i < 9; i++) {
+            animationA.addFrame(img.getSubImage(i * size, 129, size, size), 50);
+        }
+        for (int i = 0; i < 9; i++) {
+            animationW.addFrame(img.getSubImage(i * size, 197, size, size), 50);
+        }
+    }
+
     /**
      * @return the animating
      */

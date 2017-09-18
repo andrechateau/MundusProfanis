@@ -12,7 +12,7 @@ import com.andrechateau.components.Enemy;
 import com.andrechateau.components.Position;
 import com.andrechateau.components.User;
 import com.andrechateau.components.Velocity;
-import com.andrechateau.core.Game;
+import com.andrechateau.gamestates.Game;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;

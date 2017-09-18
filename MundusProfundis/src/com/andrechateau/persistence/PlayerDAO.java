@@ -9,12 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -97,4 +91,16 @@ public class PlayerDAO {
         }
     }
 
+    public static void registerPlayer(String username, String password) {
+        try (Connection conn = ConnectionFactory.getConnection()) {
+            String sqlSender = "INSERT INTO player (name,password) values (?,?)";
+            PreparedStatement stmtSender = conn.prepareStatement(sqlSender);
+            stmtSender.setString(1, username);
+            stmtSender.setString(2, password);
+            stmtSender.executeUpdate();
+            stmtSender.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PlayerDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

@@ -8,7 +8,7 @@ package com.andrechateau.systems;
 import com.andrechateau.components.ActorSprite;
 import com.andrechateau.components.Effect;
 import com.andrechateau.components.Position;
-import com.andrechateau.core.Game;
+import com.andrechateau.gamestates.Game;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;

@@ -22,7 +22,6 @@ import org.newdawn.slick.SlickException;
  *
  * @author Andre Chateaubriand
  */
-
 public class PlayerEntity {
 
     private long id;
@@ -56,6 +55,62 @@ public class PlayerEntity {
             this.entity.addComponent(actorSprite);
             this.entity.addComponent(user);
             this.entity.addToWorld();
+        } catch (SlickException ex) {
+            Logger.getLogger(PlayerEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public PlayerEntity(World world) {
+        try {
+            this.player = new Player();
+            this.id = id;
+            this.user = new User();
+            this.creature = new Creature();
+            this.creature.setHP(100);
+            this.creature.setName("Loading...");
+            this.creature.setOutfit("GM");
+            this.position = new Position(320, 320);
+            this.position.setDirection('s');
+            this.velocity = new Velocity(200, 200);
+            this.velocity.setDesiredX(320);
+            this.velocity.setDesiredY(320);
+            this.actorSprite = new ActorSprite(new Image("res/GM.png"));
+            this.entity = world.createEntity();
+            this.entity.addComponent(position);
+            this.entity.addComponent(velocity);
+            this.entity.addComponent(creature);
+            this.entity.addComponent(actorSprite);
+            this.entity.addComponent(user);
+            this.entity.addToWorld();
+        } catch (SlickException ex) {
+            Logger.getLogger(PlayerEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void setPlayer(Player player) {
+        try {
+            this.player = player;
+            this.id = player.getId();
+            this.creature.setHP(player.getHP());
+            this.creature.setName(player.getName());
+            this.creature.setOutfit(player.getOutfit());
+            this.position.setX(player.getX());
+            this.position.setY(player.getY());
+            this.position.setDirection(player.getDirection());
+            //this.velocity = new Velocity(200, 200);
+            this.velocity.setDesiredX(player.getDesiredX());
+            this.velocity.setDesiredY(player.getDesiredY());
+            
+            this.actorSprite.setNewActorSprite(new Image("res/" + creature.getOutfit() + ".png"));
+//            this.entity = world.createEntity();
+//            this.entity.addComponent(position);
+//            this.entity.addComponent(velocity);
+//            this.entity.addComponent(creature);
+//            this.entity.addComponent(actorSprite);
+//            this.entity.addComponent(user);
+            //this.entity.addToWorld();
         } catch (SlickException ex) {
             Logger.getLogger(PlayerEntity.class.getName()).log(Level.SEVERE, null, ex);
         }

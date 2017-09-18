@@ -3,12 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/gamestates/StateBasedTest.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/entities/PlayerEntity.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/gamestates/MainMenu.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/core/Fonts.java</file>
             <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/persistence/PlayerDAO.java</file>
             <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/persistence/ConnectionFactory.java</file>
-            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/mundusprofundis/Main.java</file>
             <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/esotericsoftware/kryonet/examples/position/GameClient.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/gamestates/RegisterMenu.java</file>
             <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/core/Game.java</file>
-            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/esotericsoftware/kryonet/examples/position/Network.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/mundusprofundis/Main.java</file>
+            <file>file:/C:/Users/dende/Documents/Projects/Git%20Projects/MundusProfanis/MundusProfundis/src/com/andrechateau/systems/EnemySystem.java</file>
         </group>
     </open-files>
 </project-private>
