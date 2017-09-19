@@ -1,14 +1,9 @@
 package com.andrechateau.gamestates;
 
-import static com.andrechateau.gamestates.Game.play;
-import static com.andrechateau.gamestates.Game.player;
-import static com.andrechateau.gamestates.Game.world;
-import com.andrechateau.entities.PlayerEntity;
 import com.andrechateau.persistence.PlayerDAO;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -26,8 +21,6 @@ import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.CrossStateTransition;
 import org.newdawn.slick.state.transition.EmptyTransition;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.gui.TextField;
 
 public class MainMenu extends BasicGameState {
@@ -74,11 +67,12 @@ public class MainMenu extends BasicGameState {
         window = new Image("res/window.png");
         windowx = container.getWidth() / 2 - window.getWidth() / 2;
         windowy = container.getHeight() / 2 - window.getHeight() / 2;
-
+        //try{
         BGM = new Music("res/title.ogg");
         BGM.setVolume(0);
         BGM.loop();
         BGM.fade(2000, 1, false);
+
         font = new AngelCodeFont("res/small_font.fnt", "res/small_font_0.tga");
         //font = new AngelCodeFont
         login = new MouseOverArea(container, new Image("res/btLogin.png"), windowx + 50, windowy + 235, 170, 35, new ComponentListener() {

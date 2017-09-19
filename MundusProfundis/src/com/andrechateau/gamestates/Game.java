@@ -10,13 +10,11 @@ import com.andrechateau.components.Velocity;
 import com.andrechateau.engine.GameMap;
 import com.andrechateau.entities.PlayerEntity;
 import com.andrechateau.persistence.Player;
-import com.andrechateau.persistence.PlayerDAO;
 import com.andrechateau.systems.ActionSystem;
 import com.andrechateau.systems.ActorFramerSystem;
 import com.andrechateau.systems.CombatSystem;
 import com.andrechateau.systems.EffectSystem;
 import com.andrechateau.systems.EnemySystem;
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -25,10 +23,6 @@ import org.newdawn.slick.SlickException;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.andrechateau.network.GameClient;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -84,12 +78,12 @@ public class Game extends BasicGameState {
         drawDebugLines(g, 50);
         Game.gc = gc;
         world.process();
-        if (Game.client == null) {
+        if (Game.client == null || !Game.client.isConnected()) {
             g.setColor(new Color(0, 0, 0, 150));
             g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
             g.setColor(Color.black);
             String msg = "Connecting to server...";
-            int x = gc.getWidth() / 2 - g.getFont().getHeight(msg) / 2;
+            int x = gc.getWidth() / 2 - g.getFont().getWidth(msg) / 2;
             int y = gc.getHeight() / 2 - g.getFont().getHeight(msg) / 2;
             g.fillRect(x - 2, y - 2, g.getFont().getWidth(msg) + 4, g.getFont().getHeight(msg) + 4);
             g.setColor(Color.white);
@@ -101,7 +95,7 @@ public class Game extends BasicGameState {
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         if (!clientConnected) {
             clientConnected = true;
-            Game.client = new GameClient("192.168.0.4", Game.play.getName());
+            Game.client = new GameClient(Game.play.getName());
         } else {
             world.setDelta((delta / 1000.0f));
             Game.client.clientUpdate(player.getPlayer());

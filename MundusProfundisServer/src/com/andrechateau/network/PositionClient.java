@@ -164,8 +164,4 @@ public class PositionClient {
         }
     }
 
-    public static void main(String[] args) {
-        Log.set(Log.LEVEL_DEBUG);
-        new PositionClient();
-    }
 }

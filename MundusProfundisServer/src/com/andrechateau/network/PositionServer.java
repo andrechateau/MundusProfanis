@@ -15,10 +15,11 @@ import java.sql.SQLException;
 
 public class PositionServer {
 
-    Server server;
-    HashSet<Player> loggedIn = new HashSet();
+    private Server server;
+    private HashSet<Player> loggedIn = new HashSet();
+    private ServerListener listener;
 
-    public PositionServer() throws IOException {
+    public PositionServer(ServerListener listener) throws IOException {
         server = new Server() {
             protected Connection newConnection() {
                 // By providing our own connection implementation, we can store per
@@ -26,6 +27,7 @@ public class PositionServer {
                 return new CharacterConnection();
             }
         };
+        this.listener = listener;
         Log.set(com.esotericsoftware.minlog.Log.LEVEL_INFO);
         // For consistency, the classes to be sent over the network are
         // registered by the same method for both the client and server.
@@ -38,12 +40,10 @@ public class PositionServer {
                 Player character = connection.character;
 
                 if (object instanceof Login) {
-                    System.out.println("login x");
                     // Ignore if already logged in.
                     if (character != null) {
                         return;
                     }
-                    System.out.println("login y");
 
                     // Reject if the name is invalid.
                     String name = ((Login) object).name;
@@ -51,17 +51,14 @@ public class PositionServer {
                         c.close();
                         return;
                     }
-                    System.out.println("login z");
 
                     // Reject if already logged in.
-                    for (Player other : loggedIn) {
+                    for (Player other : getLoggedIn()) {
                         if (other.getName().equals(name)) {
-                            System.out.println("ALREADY LOGGED IN");
                             c.close();
                             return;
                         }
                     }
-                    System.out.println("login w");
 
                     character = loadCharacter(name);
 
@@ -70,7 +67,6 @@ public class PositionServer {
                         c.sendTCP(new RegistrationRequired());
                         return;
                     }
-                    System.out.println("login ok!");
 
                     loggedIn(connection, character);
                     return;
@@ -163,8 +159,8 @@ public class PositionServer {
             public void disconnected(Connection c) {
                 CharacterConnection connection = (CharacterConnection) c;
                 if (connection.character != null) {
-                    loggedIn.remove(connection.character);
-
+                    getLoggedIn().remove(connection.character);
+                    listener.changedLoggedUsers(getLoggedIn());
                     RemoveCharacter removeCharacter = new RemoveCharacter();
                     removeCharacter.id = connection.character.getId();
                     server.sendToAllTCP(removeCharacter);
@@ -179,13 +175,14 @@ public class PositionServer {
         c.character = character;
 
         // Add existing characters to new logged in connection.
-        for (Player other : loggedIn) {
+        for (Player other : getLoggedIn()) {
             AddCharacter addCharacter = new AddCharacter();
             addCharacter.character = other;
             c.sendTCP(addCharacter);
         }
         System.out.println("added");
-        loggedIn.add(character);
+        getLoggedIn().add(character);
+        listener.changedLoggedUsers(getLoggedIn());
 
         // Add logged in character to all connections.
         AddCharacter addCharacter = new AddCharacter();
@@ -212,11 +209,21 @@ public class PositionServer {
 
     }
 
+    public void close() {
+        server.close();
+    }
+
+    /**
+     * @return the loggedIn
+     */
+    public HashSet<Player> getLoggedIn() {
+        return loggedIn;
+    }
+
     // This holds per connection state.
     static class CharacterConnection extends Connection {
 
         public Player character;
     }
-
 
 }

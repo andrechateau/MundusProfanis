@@ -17,11 +17,12 @@ import com.esotericsoftware.minlog.Log;
 
 public class GameClient {
 
+    public static String host;
     Client client;
     String name;
     public static HashMap<Long, CharacterEntity> characters = new HashMap();
 
-    public GameClient(String host, String name) {
+    public GameClient(String name) {
         client = new Client();
         client.start();
         Network.register(client);
@@ -40,7 +41,6 @@ public class GameClient {
                 }
 
                 if (object instanceof AddCharacter) {
-                    System.out.println("pão");
                     AddCharacter msg = (AddCharacter) object;
                     addCharacter(msg.character);
                     return;
@@ -73,7 +73,6 @@ public class GameClient {
 
                 } catch (IOException e) {
                     e.printStackTrace();
-
                 }
             }
         }.start();
@@ -104,25 +103,7 @@ public class GameClient {
         }
     }
 
-    public String inputHost() {
-        String input = (String) JOptionPane.showInputDialog(null, "Host:", "Connect to server", JOptionPane.QUESTION_MESSAGE,
-                null, null, "localhost");
-        if (input == null || input.trim().length() == 0) {
-            System.exit(1);
-        }
-        return input.trim();
-    }
-
-    public String inputName() {
-        String input = (String) JOptionPane.showInputDialog(null, "Name:", "Connect to server", JOptionPane.QUESTION_MESSAGE,
-                null, null, "Test");
-        if (input == null || input.trim().length() == 0) {
-            System.exit(1);
-        }
-        return input.trim();
-    }
-
-    public String inputOtherStuff() {
+    private String inputOtherStuff() {
         String input = (String) JOptionPane.showInputDialog(null, "Other Stuff:", "Create account", JOptionPane.QUESTION_MESSAGE,
                 null, null, "other stuff");
         if (input == null || input.trim().length() == 0) {
