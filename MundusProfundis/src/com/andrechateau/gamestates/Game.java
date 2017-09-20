@@ -17,8 +17,14 @@ import org.newdawn.slick.SlickException;
 
 import com.artemis.World;
 import com.andrechateau.network.GameClient;
-import com.andrechateau.network.Network.ChatMessage;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.AngelCodeFont;
@@ -59,6 +65,7 @@ public class Game extends BasicGameState {
         world = new World();
         RendererSystem renderer = new RendererSystem();
         map.setRenderer(renderer);
+        //saveMapBoundaries();
         world.setSystem(renderer);
         world.setSystem(new MovementSystem());
         world.setSystem(new ActorFramerSystem());
@@ -170,4 +177,29 @@ public class Game extends BasicGameState {
         }
     }
 
+    private void saveMapBoundaries() {
+        try {
+            List<String> lines = new LinkedList<String>();
+            int endx = map.getWidth();
+            int endy = map.getHeight();
+            String s = "";
+            for (int x = 0; x < endx; x++) {
+                for (int y = 0; y < endy; y++) {
+                    s += map.isBlocked(x, y) ? "1" : "0";
+                }
+                lines.add(s + "");
+                s = "";
+            }
+//        for (String line : lines) {
+//            System.out.println(line);
+//        }
+
+            Path file = Paths.get("map.txt");
+            Files.write(file, lines, Charset.forName("UTF-8"));
+//Files.write(file, lines, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
+        } catch (IOException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 }

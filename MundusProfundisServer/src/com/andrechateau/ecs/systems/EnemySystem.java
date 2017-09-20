@@ -91,13 +91,6 @@ public class EnemySystem extends EntityProcessingSystem {
             }
         }
 
-        for (Player player : GameLoop.getServer().getLoggedIn()) {
-            int distX = Math.abs((int) position.getX() - (int) player.getX());
-            int distY = Math.abs((int) position.getY() - (int) player.getY());
-            if (distX <= 32 && distY <= 32) {
-                dir = 7;
-            }
-        }
         if (dir > 0 && dir < 5) {
             moveTo(e, dir);
         }
@@ -115,34 +108,24 @@ public class EnemySystem extends EntityProcessingSystem {
                 switch (direction) {
                     case 1:
                         position.setDirection('w');
-                        //if (!Game.map.isBlocked(Game.toTile(position.getX()), Game.toTile(position.getY()) - 1)) {
                         velocity.setDesiredY(position.getY() - 32);
                         position.addY(-velocity.getY() * world.getDelta());
-                        //}
                         break;
                     case 2:
                         position.setDirection('a');
-                        //if (!Game.map.isBlocked(Game.toTile(position.getX()) - 1, Game.toTile(position.getY()))) {
                         velocity.setDesiredX(position.getX() - 32);
                         position.addX(-velocity.getX() * world.getDelta());
-
-                        //}
                         break;
                     case 3:
                         position.setDirection('s');
-                        //if (!Game.map.isBlocked(Game.toTile(position.getX()), Game.toTile(position.getY()) + 1)) {
                         velocity.setDesiredY(position.getY() + 32);
                         position.addY(velocity.getY() * world.getDelta());
 
-                        //}
                         break;
                     case 4:
                         position.setDirection('d');
-                        //if (!Game.map.isBlocked(Game.toTile(position.getX()) + 1, Game.toTile(position.getY()))) {
                         velocity.setDesiredX(position.getX() + 32);
                         position.addX(velocity.getX() * world.getDelta());
-
-                        // }
                         break;
                     default:
                         break;
@@ -160,78 +143,41 @@ public class EnemySystem extends EntityProcessingSystem {
     }
 
     private boolean canMove(Entity e, int direction) {
-        boolean can = true;
         Position position = pm.get(e);
-        int x = (int) position.getX();
-        int y = (int) position.getY();
+        int x = (int) position.getX() / 32;
+        int y = (int) position.getY() / 32;
         switch (direction) {
-            case 1:
-                position.setDirection('w');
-                for (Player player : GameLoop.getServer().getLoggedIn()) {
-                    int playerx = (((int) player.getX()) / 32) * 32;
-                    int playery = (((int) player.getY()) / 32) * 32;
-
-                    if (playerx == (x) && playery == (y - 32)) {
-                        can = false;
-                    }
-                }
+            case 1: //w
+                y--;
                 break;
-
-            case 2:
-                position.setDirection('a');
-                for (Player player : GameLoop.getServer().getLoggedIn()) {
-                    int playerx = (((int) player.getX()) / 32) * 32;
-                    int playery = (((int) player.getY()) / 32) * 32;
-                    if (playerx == (x - 32) && playery == y) {
-                        can = false;
-                    }
-
-                }
+            case 2: //a
+                x--;
                 break;
-            case 3:
-                position.setDirection('s');
-                for (Player player : GameLoop.getServer().getLoggedIn()) {
-                    int playerx = (((int) player.getX()) / 32) * 32;
-                    int playery = (((int) player.getY()) / 32) * 32;
-
-                    if (playerx == x && playery == (y + 32)) {
-                        can = false;
-                    }
-                }
+            case 3: //s
+                y++;
                 break;
-            case 4:
-                position.setDirection('d');
-                for (Player player : GameLoop.getServer().getLoggedIn()) {
-                    int playerx = (((int) player.getX()) / 32) * 32;
-                    int playery = (((int) player.getY()) / 32) * 32;
-
-                    if (playerx == (x + 32) && playery == y) {
-
-                        can = false;
-                    }
-
-                }
-                break;
-            default:
-                can = false;
+            case 4: //d
+                y--;
                 break;
         }
+        if (GameLoop.isBlocked(x, y)) {
+            return false;
+        }
+        for (Player player : GameLoop.getServer().getLoggedIn()) {
+            int playerx = (((int) player.getDesiredX()) / 32);
+            int playery = (((int) player.getDesiredY()) / 32);
+            if (playerx == (x) && playery == y) {
+                return false;
+            }
+        }
+        for (MonsterEntity monster : GameLoop.getMonsters()) {
+            int monsterx = (((int) monster.getDesiredX()) / 32);
+            int monstery = (((int) monster.getDesiredY()) / 32);
+            if (monsterx == (x) && monstery == y) {
+                return false;
+            }
+        }
         return true;
+
     }
-//    private void updateAnimation(Entity e, boolean animating) {
-//        ActorSprite actor = as.getSafe(e);
-//        if (actor != null) {
-//            if (actor.isAnimating()) {
-//                if (animating) {
-//                    actor.update((int) world.delta);
-//                } else {
-//                    actor.stop();
-//                }
-//            } else if (animating) {
-//                actor.animate();
-//            } else {
-//                actor.update((int) world.delta);
-//            }
-//        }
-//    }
 }

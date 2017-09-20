@@ -11,6 +11,10 @@ import com.andrechateau.ecs.systems.EnemySystem;
 import com.andrechateau.ecs.systems.MovementSystem;
 import com.andrechateau.network.PositionServer;
 import com.artemis.World;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,9 +47,10 @@ public class GameLoop implements Runnable {
     private static GameLoop gameloop;
     private Set<MonsterEntity> monsters = Collections.synchronizedSet(new HashSet());
     private static PositionServer server;
+    private boolean map[][];
 
     private GameLoop() {
-        ;
+        loadMap();
     }
 
     public static void start() {
@@ -167,8 +172,43 @@ public class GameLoop implements Runnable {
         }
     }
 
+    private void loadMap() {
+        try (BufferedReader txtReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/map/map.txt")))) {
+            ArrayList<String> list = new ArrayList<>();
+            String line = txtReader.readLine();
+            while (line != null) {
+                list.add(line);
+                line = txtReader.readLine();
+            }
+            int height = list.size();
+            int width = list.get(0).length();
+            map = new boolean[width][height];
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    map[x][y] = list.get(y).charAt(x) != '0';
+                    if (x == 20 && y == 20) {
+//                        System.out.print("_");
+                    } else {
+//                        System.out.print(map[x][y] ? "1" : "0");
+                    }
+                }
+//                System.out.println("   " + x);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(GameLoop.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static boolean isBlocked(int X, int Y) {
+        if (X >= 0 && X < gameloop.map.length && Y >= 0 && Y < gameloop.map[0].length) {
+            return gameloop.map[Y][X];
+        } else {
+            return false;
+        }
+    }
+}
 
 //    public static void main(String[] args) {
 //        GameLoop.start();
 //    }
-}
+
