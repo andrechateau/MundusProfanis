@@ -11,6 +11,7 @@ import com.andrechateau.gamestates.Game;
 import com.andrechateau.network.GameClient;
 import com.artemis.Entity;
 import com.artemis.utils.ImmutableBag;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
@@ -73,20 +74,18 @@ public class GameMap extends TiledMap {
     private boolean hasPlayer(int X, int Y) {
         if (Game.client != null) {
             for (CharacterEntity value : GameClient.characters.values()) {
-                int playx = ((int) value.getX() / 32) * 32;
-                int playy = ((int) value.getY() / 32) * 32;
-
-                if (playx == X || playy == Y) {
+                int playx = ((int) value.getX() / 32);
+                int playy = ((int) value.getY() / 32);
+                if (playx == X && playy == Y) {
                     return true;
                 }
             }
         }
         if (Game.client != null) {
             for (MonsterEntity value : GameClient.monsters.values()) {
-                int playx = ((int) value.getX() / 32) * 32;
-                int playy = ((int) value.getY() / 32) * 32;
-
-                if (playx == X || playy == Y) {
+                int playx = ((int) value.getX() / 32);
+                int playy = ((int) value.getY() / 32);
+                if (playx == X && playy == Y) {
                     return true;
                 }
             }
