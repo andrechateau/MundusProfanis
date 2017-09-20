@@ -1,7 +1,11 @@
 package com.andrechateau.network;
 
+import com.andrechateau.ecs.components.Effect;
+import com.andrechateau.ecs.components.Position;
 import com.andrechateau.gamestates.Game;
-import com.andrechateau.entities.CharacterEntity;
+import com.andrechateau.ecs.entities.CharacterEntity;
+import com.andrechateau.ecs.entities.MessageEntity;
+import com.andrechateau.ecs.entities.MonsterEntity;
 import com.andrechateau.persistence.Player;
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,7 +17,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.andrechateau.network.Network.*;
+import com.artemis.Entity;
 import com.esotericsoftware.minlog.Log;
+import org.newdawn.slick.Color;
 
 public class GameClient {
 
@@ -21,6 +27,7 @@ public class GameClient {
     Client client;
     String name;
     public static HashMap<Long, CharacterEntity> characters = new HashMap();
+    public static HashMap<Long, MonsterEntity> monsters = new HashMap();
 
     public GameClient(String name) {
         client = new Client();
@@ -33,15 +40,10 @@ public class GameClient {
             }
 
             public void received(Connection connection, Object object) {
-                if (object instanceof RegistrationRequired) {
-                    Register register = new Register();
-                    register.name = name;
-                    register.otherStuff = inputOtherStuff();
-                    client.sendTCP(register);
-                }
 
                 if (object instanceof AddCharacter) {
                     AddCharacter msg = (AddCharacter) object;
+                    System.out.println("> " + msg.character.getName());
                     addCharacter(msg.character);
                     return;
                 }
@@ -54,6 +56,32 @@ public class GameClient {
                 if (object instanceof RemoveCharacter) {
                     RemoveCharacter msg = (RemoveCharacter) object;
                     removeCharacter(msg.id);
+                    return;
+                }
+                if (object instanceof AddMonster) {
+                    AddMonster msg = (AddMonster) object;
+                    addMonster(msg);
+                    return;
+                }
+
+                if (object instanceof UpdateMonster) {
+                    updateMonster((UpdateMonster) object);
+                    return;
+                }
+
+                if (object instanceof RemoveMonster) {
+                    RemoveMonster msg = (RemoveMonster) object;
+                    removeMonster(msg.id);
+                    return;
+                }
+                if (object instanceof HitEffect) {
+                    HitEffect msg = (HitEffect) object;
+                    receiveHit(msg);
+                    return;
+                }
+                if (object instanceof ChatMessage) {
+                    ChatMessage msg = (ChatMessage) object;
+                    receiveChat(msg);
                     return;
                 }
             }
@@ -72,7 +100,9 @@ public class GameClient {
                     client.sendTCP(login);
 
                 } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Ocorreu um erro com a conexão ao servidor.");
                     e.printStackTrace();
+                    System.exit(0);
                 }
             }
         }.start();
@@ -96,8 +126,9 @@ public class GameClient {
                 msg.direction = player.getDirection();
                 cha.setDirection(msg.direction);
                 msg.hp = player.getHP();
-                cha.setHP(msg.hp);
+                //cha.setHP(msg.hp);
                 characters.replace(player.getId(), cha);
+                //System.out.println("sending: " + (msg.x / 32) + " " + (msg.y / 32));
                 client.sendTCP(msg);
             }
         }
@@ -123,8 +154,16 @@ public class GameClient {
         if (character == null) {
             return;
         }
-        if (!character.getName().equals(Game.player.getName())) {
-            //System.out.println(character.getName() + " moveu " + character.getX() + " " + character.getY());
+        if (character.getName().equals(Game.player.getName())) {
+            if (Game.player.getHP() < msg.hp && msg.hp == 100) {
+                Game.player.setX(msg.x);
+                Game.player.setY(msg.y);
+                Game.player.setDesiredX(msg.desiredX);
+                Game.player.setDesiredY(msg.desiredY);
+                Game.player.setDirection(msg.direction);
+            }
+            Game.player.setHP(msg.hp);
+
         }
         character.setX(msg.x);
         character.setY(msg.y);
@@ -144,6 +183,79 @@ public class GameClient {
         if (character != null) {
             System.out.println(character.getName() + " removed");
         }
+    }
+
+    public void addMonster(AddMonster monster) {
+        MonsterEntity mon = new MonsterEntity(monster.name, monster.outfit, monster.desiredX, monster.desiredY, Game.world);
+        monsters.put(monster.id, mon);
+        System.out.println(monster.name + " (" + monster.id + ") added at " + mon.getX() + ", " + mon.getY());
+    }
+
+    public void updateMonster(Network.UpdateMonster msg) {
+        MonsterEntity mon = GameClient.monsters.get(msg.id);
+        if (mon == null) {
+            return;
+        }
+
+        mon.setX(msg.x);
+        mon.setY(msg.y);
+        mon.setDesiredX(msg.desiredX);
+        mon.setDesiredY(msg.desiredY);
+        mon.setDirection(msg.direction);
+        mon.setHP(msg.hp);
+//        character.setX(msg.x);
+//        character.setY(msg.y);
+        //System.out.println(character.getName() + " moved to " + character.getX() + ", " + character.getY());
+    }
+
+    public void removeMonster(long id) {
+        MonsterEntity monster = GameClient.monsters.remove(id);
+        monster.getEntity().deleteFromWorld();
+        if (monster != null) {
+            System.out.println(monster.getName() + " removed");
+        }
+    }
+
+    public void receiveHit(HitEffect msg) {
+        Entity fx = Game.world.createEntity();
+        fx.addComponent(new Position(msg.x, msg.y));
+        fx.addComponent(new Effect(msg.sprite));
+        fx.addToWorld();
+        fx = Game.world.createEntity();
+        fx.addComponent(new Position(msg.x, msg.y));
+        fx.addComponent(new Effect(msg.number, Color.red));
+        fx.addToWorld();
+    }
+
+    public void sendChat(String message) {
+        if (message != null && message.length() > 0) {
+            ChatMessage msg = new ChatMessage();
+            msg.id = Game.player.getId();
+            msg.msg = message;
+            msg.name = Game.player.getName();
+            client.sendTCP(msg);
+//        character.setX(msg.x);
+//        character.setY(msg.y);
+            //System.out.println(character.getName() + " moved to " + character.getX() + ", " + character.getY());
+        }
+    }
+
+    public void receiveChat(ChatMessage msg) {
+        if (Game.messages.containsKey(msg.name)) {
+            MessageEntity e = Game.messages.get(msg.name);
+            if (e != null) {
+                if (e.getMsg().getTime() <= 0) {
+                    Game.messages.put(msg.name, new MessageEntity(characters.get(msg.id), msg.msg));
+                } else {
+                    e.getMsg().addMsg(msg.msg);
+                }
+            } else {
+                Game.messages.put(msg.name, new MessageEntity(characters.get(msg.id), msg.msg));
+            }
+        } else {
+            Game.messages.put(msg.name, new MessageEntity(characters.get(msg.id), msg.msg));
+        }
+        System.out.println("msg chegou: " + msg.name + " " + characters.get(msg.id).getName());
     }
 
     public void close() {

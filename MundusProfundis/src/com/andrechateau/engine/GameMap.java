@@ -5,13 +5,14 @@
  */
 package com.andrechateau.engine;
 
+import com.andrechateau.ecs.entities.CharacterEntity;
+import com.andrechateau.ecs.entities.MonsterEntity;
 import com.andrechateau.gamestates.Game;
+import com.andrechateau.network.GameClient;
 import com.artemis.Entity;
 import com.artemis.utils.ImmutableBag;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
-import sun.misc.GC;
 
 /**
  *
@@ -53,17 +54,43 @@ public class GameMap extends TiledMap {
         int walltiley = Y;
 
         if (walltilex >= 0 && walltilex <= getWidth() && walltiley >= 0 && walltiley <= getHeight()) {
-            if (getTileId(walltilex, walltiley, Game.map.getLayerIndex("64Wall")) != 0) {
-                return getTileProperty(getTileId(walltilex, walltiley, Game.map.getLayerIndex("64Wall")), "blocked", "false").equals("true");
-            } else {
-                if (getTileId(walltilex + 1, walltiley, Game.map.getLayerIndex("foreground")) != 0) {
-                    return getTileProperty(getTileId(walltilex + 1, walltiley, Game.map.getLayerIndex("foreground")), "blocked", "false").equals("true");
+            if (!hasPlayer(walltilex + 1, walltiley)) {
+                if (getTileId(walltilex, walltiley, Game.map.getLayerIndex("64Wall")) != 0) {
+                    return getTileProperty(getTileId(walltilex, walltiley, Game.map.getLayerIndex("64Wall")), "blocked", "false").equals("true");
+                } else {
+                    if (getTileId(walltilex + 1, walltiley, Game.map.getLayerIndex("foreground")) != 0) {
+                        return getTileProperty(getTileId(walltilex + 1, walltiley, Game.map.getLayerIndex("foreground")), "blocked", "false").equals("true");
+                    }
+                    return false;
                 }
-                return false;
+            } else {
+                return true;
             }
-
         }
         return true;
     }
 
+    private boolean hasPlayer(int X, int Y) {
+        if (Game.client != null) {
+            for (CharacterEntity value : GameClient.characters.values()) {
+                int playx = ((int) value.getX() / 32) * 32;
+                int playy = ((int) value.getY() / 32) * 32;
+
+                if (playx == X || playy == Y) {
+                    return true;
+                }
+            }
+        }
+        if (Game.client != null) {
+            for (MonsterEntity value : GameClient.monsters.values()) {
+                int playx = ((int) value.getX() / 32) * 32;
+                int playy = ((int) value.getY() / 32) * 32;
+
+                if (playx == X || playy == Y) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

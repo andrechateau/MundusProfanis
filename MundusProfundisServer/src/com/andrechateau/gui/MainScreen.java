@@ -5,10 +5,10 @@
  */
 package com.andrechateau.gui;
 
+import com.andrechateau.core.GameLoop;
 import com.andrechateau.network.PositionServer;
 import com.andrechateau.network.ServerListener;
 import com.andrechateau.persistence.Player;
-import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,7 +16,6 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import static java.util.Collections.list;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,9 +36,8 @@ public class MainScreen extends JFrame implements ServerListener {
     JLabel lbTitulo;
     JLabel lbRotulo;
     JButton btIniciar;
+    JButton btAddMonster;
     JList listCharacteres;
-    PositionServer server;
-    Runnable pool;
 
     public MainScreen() throws HeadlessException {
         super("Tibieau Server");
@@ -64,6 +62,8 @@ public class MainScreen extends JFrame implements ServerListener {
                 iniciar();
             }
         });
+        add(btIniciar);
+
         Object[] data = {};
         listCharacteres = new JList(data); //data has type Object[]
         listCharacteres.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -75,7 +75,20 @@ public class MainScreen extends JFrame implements ServerListener {
         listScroller.setPreferredSize(new Dimension(280, 300));
         listScroller.setBounds(10, 70, 260, 300);
         add(listScroller);
-        add(btIniciar);
+
+        btAddMonster = new JButton("Add Monster");
+        btAddMonster.setBounds(140, 390, 130, 30);
+        btAddMonster.setBackground(Color.gray);
+        btAddMonster.setForeground(Color.black);
+        btAddMonster.setEnabled(false);
+        btAddMonster.setFocusable(false);
+        btAddMonster.setBorderPainted(false);
+        btAddMonster.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                addMonster();
+            }
+        });
+        add(btAddMonster);
         setSize(300, 500);
 
         setLayout(null);
@@ -86,24 +99,32 @@ public class MainScreen extends JFrame implements ServerListener {
 
     }
 
+    public void addMonster() {
+        GameLoop.addMonster("Goblin", "troll", 20, 20);
+    }
+
     public void iniciar() {
         if (btIniciar.getText().equals("Iniciar")) {
             try {
-                if (server != null) {
-                    server.close();
-                    server = null;
+                if (GameLoop.getServer() != null) {
+                    GameLoop.getServer().close();
+                    GameLoop.setServer(null);
                 }
                 listCharacteres.setEnabled(true);
-                server = new PositionServer(this);
+                GameLoop.setServer(new PositionServer(this));
+                GameLoop.start();
                 btIniciar.setText("Encerrar");
                 btIniciar.setForeground(Color.red);
+                btAddMonster.setEnabled(true);
             } catch (IOException ex) {
                 Logger.getLogger(MainScreen.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (btIniciar.getText().equals("Encerrar")) {
-            if (server != null) {
-                server.close();
-                server = null;
+            btAddMonster.setEnabled(false);
+            GameLoop.stop();
+            if (GameLoop.getServer() != null) {
+                GameLoop.getServer().close();
+                GameLoop.setServer(null);
             }
             listCharacteres.setEnabled(false);
 

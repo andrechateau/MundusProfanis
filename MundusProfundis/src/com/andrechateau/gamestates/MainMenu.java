@@ -170,8 +170,7 @@ public class MainMenu extends BasicGameState {
         }
         if (Game.play == null) {
             wrongAccount();
-        } else {
-            BGM.fade(1000, 0, true);
+        } else {           
             GameState target = game.getState(Game.ID);
             final long start = System.currentTimeMillis();
             CrossStateTransition t = new CrossStateTransition(target) {

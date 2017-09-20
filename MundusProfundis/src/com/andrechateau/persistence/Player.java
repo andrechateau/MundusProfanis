@@ -20,6 +20,9 @@ public class Player {
     private int desiredY;
     private int HP;
     private char direction;
+    private int damage = 5;
+    private long lastMeelee = 0;
+    private int cdMeelee = 800;
     private String outfit;
 
     public Player(long id, String name, String password, int X, int Y, int desiredX, int desiredY, int HP, char direction, String outfit) {
@@ -38,7 +41,6 @@ public class Player {
     public Player() {
     }
 
-    
     /**
      * @return the id
      */
@@ -177,6 +179,48 @@ public class Player {
      */
     public void setOutfit(String outfit) {
         this.outfit = outfit;
+    }
+
+    /**
+     * @return the damage
+     */
+    public int getDamage() {
+        return damage;
+    }
+
+    /**
+     * @param damage the damage to set
+     */
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    /**
+     * @return the lastMeelee
+     */
+    public long getLastMeelee() {
+        return lastMeelee;
+    }
+
+    /**
+     * @param lastMeelee the lastMeelee to set
+     */
+    public void setLastMeelee(long lastMeelee) {
+        this.lastMeelee = lastMeelee;
+    }
+
+    /**
+     * @return the cdMeelee
+     */
+    public int getCdMeelee() {
+        return cdMeelee;
+    }
+
+    /**
+     * @param cdMeelee the cdMeelee to set
+     */
+    public void setCdMeelee(int cdMeelee) {
+        this.cdMeelee = cdMeelee;
     }
 
 }

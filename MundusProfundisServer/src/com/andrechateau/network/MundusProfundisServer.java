@@ -7,8 +7,6 @@ package com.andrechateau.network;
 
 import com.andrechateau.gui.MainScreen;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -16,11 +14,10 @@ import java.util.logging.Logger;
  */
 public class MundusProfundisServer {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
         new MainScreen();
+
     }
 
 }

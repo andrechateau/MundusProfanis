@@ -1,34 +1,39 @@
 package com.andrechateau.gamestates;
 
-import com.andrechateau.components.ActorSprite;
-import com.andrechateau.components.Creature;
-import com.andrechateau.components.Enemy;
-import com.andrechateau.systems.RendererSystem;
-import com.andrechateau.systems.MovementSystem;
-import com.andrechateau.components.Position;
-import com.andrechateau.components.Velocity;
+import com.andrechateau.ecs.entities.MessageEntity;
+import com.andrechateau.ecs.systems.RendererSystem;
+import com.andrechateau.ecs.systems.MovementSystem;
 import com.andrechateau.engine.GameMap;
-import com.andrechateau.entities.PlayerEntity;
+import com.andrechateau.ecs.entities.PlayerEntity;
 import com.andrechateau.persistence.Player;
-import com.andrechateau.systems.ActionSystem;
-import com.andrechateau.systems.ActorFramerSystem;
-import com.andrechateau.systems.CombatSystem;
-import com.andrechateau.systems.EffectSystem;
-import com.andrechateau.systems.EnemySystem;
+import com.andrechateau.ecs.systems.ActionSystem;
+import com.andrechateau.ecs.systems.ActorFramerSystem;
+import com.andrechateau.ecs.systems.ChatRenderSystem;
+import com.andrechateau.ecs.systems.EffectSystem;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import com.artemis.Entity;
 import com.artemis.World;
 import com.andrechateau.network.GameClient;
+import com.andrechateau.network.Network.ChatMessage;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.newdawn.slick.AngelCodeFont;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.gui.AbstractComponent;
+import org.newdawn.slick.gui.ComponentListener;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class Game extends BasicGameState {
 
+    public static HashMap<String, Image> images;
     public static World world;
     /**
      * The ID given to this state
@@ -40,7 +45,9 @@ public class Game extends BasicGameState {
     public static GameMap map;
     public static GameMap ground;
     public static GameClient client;
+    public static TextField tf;
     private static boolean clientConnected = false;
+    public static HashMap<String, MessageEntity> messages = new HashMap<String, MessageEntity>();
 
     public Game() {
         //super("Mundus Profundis");
@@ -56,21 +63,32 @@ public class Game extends BasicGameState {
         world.setSystem(new MovementSystem());
         world.setSystem(new ActorFramerSystem());
         world.setSystem(new ActionSystem());
-        world.setSystem(new EnemySystem());
+        //world.setSystem(new EnemySystem());
         world.setSystem(new EffectSystem());
-        world.setSystem(new CombatSystem());
+        world.setSystem(new ChatRenderSystem());
+        //world.setSystem(new CombatSystem());
         world.initialize();
         player = new PlayerEntity(world);
-
-        //new PlayerEntity(new Player(14, "jao", "12", 320, 320, 320, 320, 100, 's', "hunter"), world);
-        Entity e = world.createEntity();
-        e = world.createEntity();
-        e.addComponent(new Position(640, 640));
-        e.addComponent(new ActorSprite(new Image("res/troll.png")));
-        e.addComponent(new Velocity(70, 70));
-        e.addComponent(new Creature("Goblinho", "troll", 100));
-        e.addComponent(new Enemy());
-        e.addToWorld();
+        loadImages();
+        Font font = new AngelCodeFont("res/small_font.fnt", "res/small_font_0.tga");
+        tf = new TextField(gc, font, 5, gc.getHeight() - 25, 200, 20, new ComponentListener() {
+            public void componentActivated(AbstractComponent source) {
+                Game.client.sendChat(tf.getText());
+                tf.setText("");
+            }
+        });
+        Color invisible = new Color(0, 0, 0, 0);
+        //tf.setBackgroundColor(invisible);
+        tf.setBorderColor(Color.white);
+        // tf.setFocus(false);
+//        Entity e = world.createEntity();
+//        e = world.createEntity();
+//        e.addComponent(new Position(640, 640));
+//        e.addComponent(new ActorSprite(new Image("res/troll.png")));
+//        e.addComponent(new Velocity(70, 70));
+//        e.addComponent(new Creature("Goblinho", "troll", 100));
+//        e.addComponent(new Enemy());
+//        e.addToWorld();
     }
 
     @Override
@@ -89,6 +107,8 @@ public class Game extends BasicGameState {
             g.setColor(Color.white);
             g.drawString(msg, x, y);
         }
+        g.setColor(Color.white);
+        tf.render(gc, g);
     }
 
     @Override
@@ -122,6 +142,15 @@ public class Game extends BasicGameState {
 //        return true;//To change body of generated methods, choose Tools | Templates.
 //    }
 
+    public void loadImages() {
+        try {
+            images = new HashMap<>();
+            images.put("res/troll.png", new Image("res/troll.png"));
+        } catch (SlickException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public static int toTile(float coordinate) {
         return (int) coordinate / 32;
     }
@@ -129,6 +158,16 @@ public class Game extends BasicGameState {
     @Override
     public int getID() {
         return ID;
+    }
+
+    public void keyReleased(int key, char c) {
+        if (key == Input.KEY_ENTER) {
+            if (!tf.hasFocus()) {
+                tf.setFocus(true);
+            } else {
+                tf.setFocus(false);
+            }
+        }
     }
 
 }
