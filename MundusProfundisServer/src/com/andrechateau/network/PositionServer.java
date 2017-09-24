@@ -72,7 +72,6 @@ public class PositionServer {
                 if (object instanceof MoveCharacter) {
                     // Ignore if not logged in.
                     if (character == null) {
-                        System.out.println("not Logged In");
                         return;
                     }
 
@@ -123,7 +122,7 @@ public class PositionServer {
                 if (connection.character != null) {
                     saveCharacter(connection.character);
                     getLoggedIn().remove(connection.character);
-                    listener.changedLoggedUsers(getLoggedIn());                    
+                    listener.changedLoggedUsers(getLoggedIn());
                     RemoveCharacter removeCharacter = new RemoveCharacter();
                     removeCharacter.id = connection.character.getId();
                     server.sendToAllTCP(removeCharacter);
@@ -156,7 +155,6 @@ public class PositionServer {
             msg.outfit = m.getOutfit();
             c.sendTCP(msg);
         }
-        System.out.println("added");
         getLoggedIn().add(character);
         listener.changedLoggedUsers(getLoggedIn());
 
@@ -164,7 +162,6 @@ public class PositionServer {
         AddCharacter addCharacter = new AddCharacter();
         addCharacter.character = character;
         server.sendToAllTCP(addCharacter);
-        System.out.println("added");
     }
 
     boolean saveCharacter(Player character) {
@@ -218,7 +215,6 @@ public class PositionServer {
         msg.hp = m.getHP();
         msg.id = m.getId();
         server.sendToAllTCP(msg);
-        //System.out.println("updated " + msg.id + " (" + m.getName() + ") ");
     }
 
     public void updateCharacter(Character character) {
@@ -231,7 +227,6 @@ public class PositionServer {
         update.direction = character.getDirection();
         update.hp = character.getHP();
         server.sendToAllTCP(update);
-        //System.out.println("updated " + msg.id + " (" + m.getName() + ") ");
     }
 
     public void removeMonster(MonsterEntity m) {
@@ -286,6 +281,10 @@ public class PositionServer {
                 fx.number = "EXURA GRAN";
                 fx.sprite = "exura";
                 server.sendToAllTCP(fx);
+            }
+            if (text.equalsIgnoreCase("!newmonster")) {
+                GameLoop.addMonster("Goblin", "troll", 20, 20);
+                change = true;
             }
             if (change) {
                 Character c = new Character();

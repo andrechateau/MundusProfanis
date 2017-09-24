@@ -5,12 +5,10 @@
  */
 package com.andrechateau.ecs.entities;
 
-import com.andrechateau.core.GameLoop;
 import com.andrechateau.ecs.components.Creature;
 import com.andrechateau.ecs.components.Enemy;
 import com.andrechateau.ecs.components.Position;
 import com.andrechateau.ecs.components.Velocity;
-import com.andrechateau.persistence.Player;
 import com.artemis.Entity;
 import com.artemis.World;
 

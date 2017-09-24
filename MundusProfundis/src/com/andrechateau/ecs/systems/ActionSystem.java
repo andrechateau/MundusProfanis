@@ -92,7 +92,6 @@ public class ActionSystem extends EntityProcessingSystem {
                     Game.map.setTileId(l == 2 ? tileX - 1 : tileX, tileY, l, 385);
                     break;
             }
-            //System.out.println(tileid + " " + l);
         } else if (Game.gc.getInput().isKeyDown(Input.KEY_LALT)) {
             if (l == 0) {
                 if (Game.player.getHP() > 0) {

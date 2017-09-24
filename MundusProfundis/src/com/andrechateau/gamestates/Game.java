@@ -194,13 +194,10 @@ public class Game extends BasicGameState {
                 lines.add(s + "");
                 s = "";
             }
-//        for (String line : lines) {
-//            System.out.println(line);
-//        }
+
 
             Path file = Paths.get("map.txt");
             Files.write(file, lines, Charset.forName("UTF-8"));
-//Files.write(file, lines, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
         } catch (IOException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }

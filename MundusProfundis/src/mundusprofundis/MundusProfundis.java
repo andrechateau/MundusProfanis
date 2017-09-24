@@ -22,15 +22,6 @@ import org.newdawn.slick.SlickException;
 public class MundusProfundis {
 
     public static void main(String[] args) {
-        try {
-            InetAddress giriAddress = java.net.InetAddress.getByName("andrechateau.com");
-            System.out.println(giriAddress.getHostAddress());
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(MundusProfundis.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-//        System.setProperty("org.lwjgl.librarypath", new File("native/windows").getAbsolutePath());
-//        System.setProperty("org.lwjgl.librarypath", new File("native/windows").getAbsolutePath());
         try (BufferedReader br = new BufferedReader(new FileReader("host.txt"))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
@@ -66,7 +57,7 @@ public class MundusProfundis {
         } catch (IOException ex) {
             GameClient.host = "localhost";
         }
-        System.out.println("host=" + GameClient.host);
+        System.out.println("host = " + GameClient.host);
 
         try {
             AppGameContainer app = new AppGameContainer(new ScalableGame(new StateManager(), 800, 600));

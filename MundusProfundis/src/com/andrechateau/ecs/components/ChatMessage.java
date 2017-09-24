@@ -7,7 +7,6 @@ package com.andrechateau.ecs.components;
 
 import com.artemis.Component;
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  *

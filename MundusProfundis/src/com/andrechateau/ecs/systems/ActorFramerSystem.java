@@ -6,7 +6,6 @@
 package com.andrechateau.ecs.systems;
 
 import com.andrechateau.ecs.components.ActorSprite;
-import com.andrechateau.ecs.components.Position;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;

@@ -74,11 +74,8 @@ public class CombatSystem extends EntityProcessingSystem {
 
     private void attack(Entity attacker, Entity attacked) {
         Creature atkr = cm.get(attacker);
-        Position pos = pm.get(attacked);
         Creature atkd = cm.get(attacked);
-//        System.out.println(atkr.getName() + " attacked " + atkd.getName());
         if (System.currentTimeMillis() >= atkr.getLastMeelee() + atkr.getCdMeelee()) {
-            System.out.println(".");
             int damage = atkr.getDamage() + (new Random().nextInt(4) - 2);
             atkd.setHP(atkd.getHP() - damage);
             atkr.setLastMeelee(System.currentTimeMillis());
@@ -97,25 +94,12 @@ public class CombatSystem extends EntityProcessingSystem {
                     }
                 }
             }
-            //Entity fx = world.createEntity();
-            //fx.addComponent(new Position(pos.getX(), pos.getY()));
-            //fx.addComponent(new Effect("hit"));
-            //fx.addToWorld();
-            // fx = world.createEntity();
-            //fx.addComponent(new Position(pos.getX(), pos.getY()));
-            //fx.addComponent(new Effect(damage, Color.red));
-            //fx.addToWorld();
-        } else {
-            System.out.println("show");
         }
     }
 
     private void attackMonster(Player attacker, Entity attacked) {
         Creature atkd = cm.get(attacked);
-//        System.out.println(attacker.getName() + " attacked " + atkd.getName());
         if (System.currentTimeMillis() >= attacker.getLastMeelee() + attacker.getCdMeelee()) {
-//            System.out.println(System.currentTimeMillis() + " " + (attacker.getLastMeelee() + attacker.getCdMeelee()));
-//
             int damage = attacker.getDamage() + (new Random().nextInt(4) - 2);
             atkd.setHP(atkd.getHP() - damage);
             attacker.setLastMeelee(System.currentTimeMillis());
@@ -143,16 +127,12 @@ public class CombatSystem extends EntityProcessingSystem {
 
             }
 
-        } else {
-            System.out.println("show");
         }
     }
 
     private void attackPlayer(Entity attacker, Player attacked) {
         Creature atkr = cm.get(attacker);
-//        System.out.println(atkr.getName() + " attacked " + attacked.getName());
         if (System.currentTimeMillis() >= atkr.getLastMeelee() + atkr.getCdMeelee()) {
-//            System.out.println(System.currentTimeMillis() + " " + (atkr.getLastMeelee() + atkr.getCdMeelee()));
 
             int damage = atkr.getDamage() + (new Random().nextInt(4) - 2);
             attacked.setHP(attacked.getHP() - damage);
@@ -175,8 +155,6 @@ public class CombatSystem extends EntityProcessingSystem {
             c.setId((int) attacked.getId());
             GameLoop.getServer().updateCharacter(c);
 
-        } else {
-//            System.out.println("show");
         }
     }
 

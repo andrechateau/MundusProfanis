@@ -46,7 +46,6 @@ public class GameClient {
 
                 if (object instanceof AddCharacter) {
                     AddCharacter msg = (AddCharacter) object;
-                    System.out.println("> " + msg.character.getName());
                     addCharacter(msg.character);
                     return;
                 }
@@ -129,9 +128,7 @@ public class GameClient {
                 msg.direction = player.getDirection();
                 cha.setDirection(msg.direction);
                 msg.hp = player.getHP();
-                //cha.setHP(msg.hp);
                 characters.replace(player.getId(), cha);
-                //System.out.println("sending: " + (msg.x / 32) + " " + (msg.y / 32));
                 client.sendTCP(msg);
             }
         }
@@ -149,7 +146,6 @@ public class GameClient {
     public void addCharacter(Player character) {
         CharacterEntity cha = new CharacterEntity(character, Game.world);
         GameClient.characters.put(character.getId(), cha);
-        System.out.println(character.getName() + " added at " + character.getX() + ", " + character.getY());
     }
 
     public void updateCharacter(Network.UpdateCharacter msg) {
@@ -174,10 +170,6 @@ public class GameClient {
         character.setDesiredY(msg.desiredY);
         character.setDirection(msg.direction);
         character.setHP(msg.hp);
-
-//        character.setX(msg.x);
-//        character.setY(msg.y);
-        //System.out.println(character.getName() + " moved to " + character.getX() + ", " + character.getY());
     }
 
     public void removeCharacter(long id) {
@@ -206,9 +198,6 @@ public class GameClient {
         mon.setDesiredY(msg.desiredY);
         mon.setDirection(msg.direction);
         mon.setHP(msg.hp);
-//        character.setX(msg.x);
-//        character.setY(msg.y);
-        //System.out.println(character.getName() + " moved to " + character.getX() + ", " + character.getY());
     }
 
     public void removeMonster(long id) {
@@ -237,9 +226,6 @@ public class GameClient {
             msg.msg = message;
             msg.name = Game.player.getName();
             client.sendTCP(msg);
-//        character.setX(msg.x);
-//        character.setY(msg.y);
-            //System.out.println(character.getName() + " moved to " + character.getX() + ", " + character.getY());
         }
     }
 

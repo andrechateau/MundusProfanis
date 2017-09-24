@@ -176,7 +176,6 @@ public class MainMenu extends BasicGameState {
         String log = tf.getText();
         String pass = pw.getText();
         try {
-            //System.out.println(log + " " + pass);
             Game.play = PlayerDAO.getPlayerByLogin(log, pass);
 
             if (Game.play != null) {

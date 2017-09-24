@@ -52,33 +52,11 @@ public class EnemySystem extends EntityProcessingSystem {
 
     @Override
     protected void process(Entity e) {
-//        Position position = pm.get(e);
         enemyMovement(e);
-
-//        if ((Math.abs(Game.player.getX() - position.getX()) <= 32) && (Math.abs(Game.player.getY() - position.getY()) <= 32)) {
-//            attackPlayer(e);
-//        } else {
-//            enemyMovement(e);
-//        }
-//        Creature creature = cm.get(e);
-//        if (creature.getHP() <= 0) {
-//            for (MonsterEntity monster : GameLoop.getMonsters()) {
-//                if (monster.getId()) {
-//                
-//                }
-//
-//            }
-//            GameLoop.getServer().removeMonster(GameLoop.getMonsters());
-//            e.deleteFromWorld();
-//
-//        }
-//    }
     }
 
     private void enemyMovement(Entity e) {
         Position position = pm.get(e);
-//        if (position.getX() % 32 == 0 && position.getY() % 32 == 0) {
-//            boolean anm = false;
         int dir = new Random().nextInt(6);
 
         for (Player player : GameLoop.getServer().getLoggedIn()) {
@@ -94,16 +72,13 @@ public class EnemySystem extends EntityProcessingSystem {
         if (dir > 0 && dir < 5) {
             moveTo(e, dir);
         }
-//
-//        }
+
     }
 
     private void moveTo(Entity e, int direction) {
         Position position = pm.get(e);
         Velocity velocity = vm.get(e);
         if (position.getX() % 32 == 0 && position.getY() % 32 == 0) {
-//            System.out.print("X: " + position.getX() + " (" + (position.getX() % 32) + "  ");
-//            System.out.println("Y: " + position.getY() + " (" + (position.getY() % 32) + "  ");
             if (canMove(e, direction)) {
                 switch (direction) {
                     case 1:

@@ -32,8 +32,6 @@ public class MovementSystem extends EntityProcessingSystem {
         }
         if (position.getX() % 32 == 0 && position.getY() % 32 == 0) {
         } else {
-//            System.out.print(position.getY() + " " + velocity.getDesiredY() + " " + position.getDirection() + "   ");
-//            System.out.println(position.getX() + " " + velocity.getDesiredX());
             switch (position.getDirection()) {
                 case 'w':
                     if (position.getY() > velocity.getDesiredY()) {

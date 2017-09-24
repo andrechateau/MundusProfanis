@@ -3,13 +3,11 @@ package com.andrechateau.ecs.systems;
 import com.andrechateau.ecs.components.ActorSprite;
 import com.andrechateau.ecs.components.Position;
 import com.andrechateau.ecs.components.Velocity;
-import com.andrechateau.gamestates.Game;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.annotations.Mapper;
 import com.artemis.systems.EntityProcessingSystem;
-import org.newdawn.slick.Input;
 
 public class MovementSystem extends EntityProcessingSystem {
 
@@ -28,7 +26,6 @@ public class MovementSystem extends EntityProcessingSystem {
     }
 
     protected void process(Entity e) {
-        
         Position position = pm.get(e);
         Velocity velocity = vm.get(e);
         if (velocity.getDesiredX() < 0) {
@@ -72,10 +69,6 @@ public class MovementSystem extends EntityProcessingSystem {
                     break;
             }
         }
-//        if (Game.gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
-//            System.out.println(Game.map.getTileId(Game.toTile(position.getX()), Game.toTile(position.getY()), 1));
-//
-//        }
     }
 
     private void updateAnimation(Entity e, boolean animating) {

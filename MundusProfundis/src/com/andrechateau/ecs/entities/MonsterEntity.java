@@ -12,10 +12,6 @@ import com.andrechateau.ecs.components.Velocity;
 import com.andrechateau.gamestates.Game;
 import com.artemis.Entity;
 import com.artemis.World;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
 /**
  *

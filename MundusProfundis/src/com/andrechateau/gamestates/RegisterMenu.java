@@ -2,8 +2,6 @@ package com.andrechateau.gamestates;
 
 import com.andrechateau.persistence.PlayerDAO;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -160,7 +158,6 @@ public class RegisterMenu extends BasicGameState {
         String pass = pw.getText();
         try {
             if ((!log.equals("")) && (!pass.equals("")) && (PlayerDAO.getPlayerByUsername(log) == null)) {
-                System.out.print("HERE");
                 PlayerDAO.registerPlayer(log, pass);
                 Game.play = PlayerDAO.getPlayerByLogin(log, pass);
                 if (Game.play != null) {

@@ -11,7 +11,6 @@ import com.andrechateau.gamestates.Game;
 import com.andrechateau.network.GameClient;
 import com.artemis.Entity;
 import com.artemis.utils.ImmutableBag;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
