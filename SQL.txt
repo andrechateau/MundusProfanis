@@ -1,3 +1,5 @@
+CREATE SCHEMA mundusprofundis;
+USE mundusprofundis;
 CREATE TABLE PLAYER(
 id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(45) NOT NULL UNIQUE ,
@@ -10,4 +12,14 @@ HP INT NOT NULL DEFAULT 100,
 direction char NOT NULL DEFAULT 'd'
 outfit VARCHAR(45) NOT NULL DEFAULT 'GM'
 );
+CREATE USER 'player'@'%' IDENTIFIED BY 'password';
+GRANT SELECT, INSERT ON mundusprofundis.* TO 'player'@'%' IDENTIFIED BY 'password';
+CREATE USER 'player'@'localhost' IDENTIFIED BY 'password';
+GRANT SELECT, INSERT ON mundusprofundis.* TO 'player'@'localhost' IDENTIFIED BY 'password';
 
+LOCK TABLES `player` WRITE;
+/*!40000 ALTER TABLE `player` DISABLE KEYS */;
+INSERT INTO `player` VALUES (1,'dendem','123',1027,896,1056,896,86,'d','GM'),(2,'jao','123',672,899,672,928,100,'s','GM'),(3,'john','1235',1120,1571,1120,1600,100,'s','GM');
+/*!40000 ALTER TABLE `player` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

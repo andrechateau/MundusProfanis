@@ -157,7 +157,7 @@ public class EnemySystem extends EntityProcessingSystem {
                 y++;
                 break;
             case 4: //d
-                y--;
+                x++;
                 break;
         }
         if (GameLoop.isBlocked(x, y)) {

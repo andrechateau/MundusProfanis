@@ -6,6 +6,7 @@ import com.andrechateau.ecs.components.Position;
 import com.andrechateau.ecs.components.User;
 import com.andrechateau.gamestates.Game;
 import com.andrechateau.engine.Renderer;
+import static com.andrechateau.gamestates.Game.msgRecord;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -46,7 +47,6 @@ public class RendererSystem extends EntitySystem implements Renderer {
     @Override
     protected void processEntities(ImmutableBag<Entity> entities) {
         try {
-
             if (font == null) {
                 font = new AngelCodeFont("res/small_font.fnt", "res/small_font_0.tga");
             }
@@ -146,7 +146,7 @@ public class RendererSystem extends EntitySystem implements Renderer {
                 Game.gc.getGraphics().fillRect(x + 1, y - 9, 30 * c.getHP() / 100, 2);
                 Game.gc.getGraphics().drawRect(x, y, 32, 32);
                 Game.gc.getGraphics().drawRect(x + 1, y + 1, 30, 30);
-                
+
                 as.get(e).getImage(position.getDirection()).draw(x - 32, y - 32, 64, 64);
 
             }
@@ -182,6 +182,18 @@ public class RendererSystem extends EntitySystem implements Renderer {
     }
 
     private void HUDRender() {
-
+        Game.gc.getGraphics().setColor(new Color(0, 0, 0, 0.5f));
+        Game.gc.getGraphics().setFont(font);
+        Game.gc.getGraphics().fillRect(5, Game.gc.getHeight() - 30 - 155, 300, 155);
+        Game.gc.getGraphics().setColor(Color.white);
+        int listSize = Game.msgRecord.size();
+        int maxsize = listSize >= 10 ? 10 : listSize;
+        int end = listSize - 1;
+        int init = listSize >= 10 ? listSize - 10 : 0;
+        int k = maxsize;
+        for (int i = end; i >= init; i--) {
+            k--;
+            Game.gc.getGraphics().drawString(msgRecord.get(i), 10, Game.gc.getHeight() - 30 + (k * 15) - (maxsize * 15));
+        }
     }
 }

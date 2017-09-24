@@ -165,8 +165,8 @@ public class CombatSystem extends EntityProcessingSystem {
 
             //attacked.setHP(100);
             com.andrechateau.network.Character c = new com.andrechateau.network.Character();
-            c.setX(attacked.getX());
-            c.setY(attacked.getY());
+            c.setX(attacked.getDesiredX());
+            c.setY(attacked.getDesiredY());
             c.setDesiredX(attacked.getDesiredX());
             c.setDesiredY(attacked.getDesiredY());
             c.setDirection(attacked.getDirection());

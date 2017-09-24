@@ -121,8 +121,9 @@ public class PositionServer {
             public void disconnected(Connection c) {
                 CharacterConnection connection = (CharacterConnection) c;
                 if (connection.character != null) {
+                    saveCharacter(connection.character);
                     getLoggedIn().remove(connection.character);
-                    listener.changedLoggedUsers(getLoggedIn());
+                    listener.changedLoggedUsers(getLoggedIn());                    
                     RemoveCharacter removeCharacter = new RemoveCharacter();
                     removeCharacter.id = connection.character.getId();
                     server.sendToAllTCP(removeCharacter);
@@ -304,6 +305,9 @@ public class PositionServer {
     }
 
     public void close() {
+        for (Player player : loggedIn) {
+            saveCharacter(player);
+        }
         server.close();
     }
 

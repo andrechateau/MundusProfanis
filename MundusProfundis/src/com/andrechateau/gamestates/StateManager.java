@@ -17,6 +17,7 @@ public class StateManager extends StateBasedGame {
      * org.newdawn.slick.state.StateBasedGame#initStatesList(org.newdawn.slick.GameContainer)
      */
     public void initStatesList(GameContainer container) {
+        addState(new InitState());
         addState(new MainMenu());
         addState(new RegisterMenu());
         addState(new Game());
@@ -24,7 +25,14 @@ public class StateManager extends StateBasedGame {
 
     @Override
     public boolean closeRequested() {
+
+        if (MainMenu.BGM != null) {
+            MainMenu.BGM.stop();
+        }
         if (Game.client != null) {
+            if (Game.player != null) {
+                Game.client.clientUpdate(Game.player.getPlayer());
+            }
             Game.client.close();
         }
         System.exit(0);

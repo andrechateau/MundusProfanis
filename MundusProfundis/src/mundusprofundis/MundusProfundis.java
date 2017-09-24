@@ -3,9 +3,13 @@ package mundusprofundis;
 import com.andrechateau.gamestates.StateManager;
 import com.andrechateau.network.GameClient;
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.ScalableGame;
@@ -18,7 +22,15 @@ import org.newdawn.slick.SlickException;
 public class MundusProfundis {
 
     public static void main(String[] args) {
-        System.setProperty("org.lwjgl.librarypath", new File("native/windows").getAbsolutePath());
+        try {
+            InetAddress giriAddress = java.net.InetAddress.getByName("andrechateau.com");
+            System.out.println(giriAddress.getHostAddress());
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(MundusProfundis.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+//        System.setProperty("org.lwjgl.librarypath", new File("native/windows").getAbsolutePath());
+//        System.setProperty("org.lwjgl.librarypath", new File("native/windows").getAbsolutePath());
         try (BufferedReader br = new BufferedReader(new FileReader("host.txt"))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
@@ -46,6 +58,11 @@ public class MundusProfundis {
 
             }
             String everything = sb.toString();
+        } catch (FileNotFoundException ex) {
+           ServerSelectScreen sl =  new ServerSelectScreen();
+           sl.setModal(true);
+           sl.setVisible(true);
+            GameClient.host = ServerSelectScreen.server;
         } catch (IOException ex) {
             GameClient.host = "localhost";
         }

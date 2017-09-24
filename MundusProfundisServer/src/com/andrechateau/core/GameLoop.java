@@ -164,8 +164,11 @@ public class GameLoop implements Runnable {
             float delta = updateLength / ((float) OPTIMAL_TIME);
             // update the game logic
             doGameUpdates(delta);
+
+            long timeout = (lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
+            timeout = timeout >= 0 ? timeout : 0;
             try {
-                Thread.sleep((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000);
+                Thread.sleep(timeout);
             } catch (InterruptedException ex) {
                 Logger.getLogger(GameLoop.class.getName()).log(Level.SEVERE, null, ex);
             }

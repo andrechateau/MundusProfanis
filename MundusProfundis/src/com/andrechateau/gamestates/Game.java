@@ -52,6 +52,7 @@ public class Game extends BasicGameState {
     public static GameMap ground;
     public static GameClient client;
     public static TextField tf;
+    public static List<String> msgRecord;
     private static boolean clientConnected = false;
     public static HashMap<String, MessageEntity> messages = new HashMap<String, MessageEntity>();
 
@@ -61,6 +62,7 @@ public class Game extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        msgRecord = new LinkedList<>();
         map = new GameMap("res/teste22.tmx");
         world = new World();
         RendererSystem renderer = new RendererSystem();
@@ -78,7 +80,7 @@ public class Game extends BasicGameState {
         player = new PlayerEntity(world);
         loadImages();
         Font font = new AngelCodeFont("res/small_font.fnt", "res/small_font_0.tga");
-        tf = new TextField(gc, font, 5, gc.getHeight() - 25, 200, 20, new ComponentListener() {
+        tf = new TextField(gc, font, 5, gc.getHeight() - 25, 300, 20, new ComponentListener() {
             public void componentActivated(AbstractComponent source) {
                 Game.client.sendChat(tf.getText());
                 tf.setText("");
@@ -115,7 +117,9 @@ public class Game extends BasicGameState {
             g.drawString(msg, x, y);
         }
         g.setColor(Color.white);
+
         tf.render(gc, g);
+
     }
 
     @Override

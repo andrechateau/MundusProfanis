@@ -19,6 +19,9 @@ import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 import com.andrechateau.network.Network.*;
 import com.artemis.Entity;
 import com.esotericsoftware.minlog.Log;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import org.newdawn.slick.Color;
 
 public class GameClient {
@@ -255,7 +258,31 @@ public class GameClient {
         } else {
             Game.messages.put(msg.name, new MessageEntity(characters.get(msg.id), msg.msg));
         }
-        System.out.println("msg chegou: " + msg.name + " " + characters.get(msg.id).getName());
+        Date now = new Date(System.currentTimeMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        String strmsg = "[" + formatter.format(now) + "] " + msg.name + ": " + msg.msg;
+        int chars = 50;
+        String str[] = strmsg.split(" ");
+        String line = "";
+        for (int i = 0; i < str.length; i++) {
+            if(line.length()+str.length<=chars){
+                line +=str[i] + " ";
+            }else{
+                Game.msgRecord.add(line+" ");
+                line = str[i]+" ";
+            }
+        }
+        if(line.length()>0){
+            Game.msgRecord.add(line);
+        }
+//
+//        for (int i = 0; i < line.length(); i += chars) {
+//            if (line.length() >= i + chars) {
+//                Game.msgRecord.add(line.substring(i, i + chars));
+//            } else {
+//                Game.msgRecord.add(line.substring(i));
+//            }
+//        }
     }
 
     public void close() {

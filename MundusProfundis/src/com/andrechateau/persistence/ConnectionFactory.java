@@ -5,6 +5,7 @@
  */
 package com.andrechateau.persistence;
 
+import com.andrechateau.network.GameClient;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,10 +14,16 @@ import java.sql.SQLException;
  *
  * @author Andre Chateaubriand
  */
-
 public class ConnectionFactory {
 
+    private static boolean registred = false;
+
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://192.168.0.4/mundusprofundis", "player", "password");
+        if (!registred) {
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            registred = true;
+        }
+        //return DriverManager.getConnection("jdbc:mysql://localhost/mundusprofundis", "player", "password");
+        return DriverManager.getConnection("jdbc:mysql://" + GameClient.host + "/mundusprofundis", "player", "password");
     }
 }

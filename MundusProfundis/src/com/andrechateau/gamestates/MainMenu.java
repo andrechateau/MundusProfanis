@@ -1,6 +1,8 @@
 package com.andrechateau.gamestates;
 
+import com.andrechateau.network.GameClient;
 import com.andrechateau.persistence.PlayerDAO;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.CrossStateTransition;
 import org.newdawn.slick.state.transition.EmptyTransition;
 import org.newdawn.slick.gui.TextField;
+import org.newdawn.slick.util.ResourceLoader;
 
 public class MainMenu extends BasicGameState {
 
@@ -35,7 +38,7 @@ public class MainMenu extends BasicGameState {
     private Image background;
     private Image window;
     private int windowx, windowy;
-    private Music BGM;
+    public static Music BGM;
     private TextField tf;
     private TextField pw;
     private Font font;
@@ -68,10 +71,8 @@ public class MainMenu extends BasicGameState {
         windowx = container.getWidth() / 2 - window.getWidth() / 2;
         windowy = container.getHeight() / 2 - window.getHeight() / 2;
         //try{
-        BGM = new Music("res/title.ogg");
-        BGM.setVolume(0);
-        BGM.loop();
-        BGM.fade(2000, 1, false);
+        InputStream in1 = ResourceLoader.getResourceAsStream("res/Title.ogg");
+        BGM = new Music(in1, "Title.ogg");
 
         font = new AngelCodeFont("res/small_font.fnt", "res/small_font_0.tga");
         //font = new AngelCodeFont
@@ -126,7 +127,25 @@ public class MainMenu extends BasicGameState {
         login.render(container, g);
         register.render(container, g);
         g.drawString(new String(new char[pw.getText().length()]).replace("\0", "*") + (pw.hasFocus() ? "_" : ""), pw.getX() + 5, pw.getY() + 5);
+        g.setFont(font);
+        g.setColor(Color.white);
+        String server = "Server: " + GameClient.host;
+        g.drawString(server, container.getWidth() - font.getWidth(server) - 10, container.getHeight() - 15);
+        g.drawString("contato@andrechateau.com", 10, container.getHeight() - 15);
+    }
 
+    /**
+     * @see
+     * org.newdawn.slick.state.GameState#enter(org.newdawn.slick.GameContainer,
+     * org.newdawn.slick.state.StateBasedGame)
+     */
+    public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+        BGM.setVolume(1);
+        BGM.loop();
+        pw.setFocus(false);
+        tf.setFocus(true);
+        tf.setText("");
+        pw.setText("");
     }
 
     /**
@@ -170,7 +189,7 @@ public class MainMenu extends BasicGameState {
         }
         if (Game.play == null) {
             wrongAccount();
-        } else {           
+        } else {
             GameState target = game.getState(Game.ID);
             final long start = System.currentTimeMillis();
             CrossStateTransition t = new CrossStateTransition(target) {
